@@ -1,0 +1,4 @@
+*.o
+planet_sim
+.vscode/
+logs.txt
