@@ -1,4 +1,6 @@
 *.o
+*.dll
+*.exe
 planet_sim
 .vscode/
 logs.txt

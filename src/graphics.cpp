@@ -61,6 +61,8 @@ void RenderTarget::drawSprite(const Point2D start, const Size2D size, const Imag
 void BaseWindow::runEventCycle() {
     while (window.isOpen()) {
         sf::Event event;
+        double last_time = 0;
+
         while (window.pollEvent(event))
         {
             // close if escape clicked
@@ -69,6 +71,12 @@ void BaseWindow::runEventCycle() {
                 close();
             }
         }
-        update();
+
+        uint64_t current_time = clk.getElapsedTime().asMicroseconds();
+        if (current_time - last_time >= 10000) {
+            double dt = (double)(current_time - last_time) / 1000000;
+            update(dt);
+            last_time = current_time;
+        }
     }
 }

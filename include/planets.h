@@ -8,7 +8,7 @@
 
 class SpaceObject : public Renderable {
 public:
-    virtual void move() {}
+    virtual void move(const double delta_time) {}
 
     SpaceObject(const Point2D _pos, const char *const img_path) :
         pos   (_pos),
@@ -16,7 +16,7 @@ public:
     {}
 
     void draw(RenderTarget& render_target) override {
-        move();
+        move(const double delta_time);
         render_target.drawSprite(pos, {IMG_W, IMG_H}, asset);
     }
 
