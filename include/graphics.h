@@ -95,9 +95,10 @@ public:
         window.close();
     }
 
-    void update() {
+    void update(const double delta_time) {
         for (auto obj : draw_objects) {
             if (obj) {
+                obj->update(delta_time);
                 obj->draw(draw_target);
             }
         }
