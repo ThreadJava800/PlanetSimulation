@@ -5,13 +5,8 @@
 #include <cstdlib>
 #include <ctime>
 
-static const char *const logfile_name = "logs.txt";
-
-static FILE *logfile_p = nullptr;
-
-static void closeLogFile() {
-    fclose(logfile_p);
-}
+void closeLogFile();
+void dbgPrint(const char *const fmt, ...);
 
 #define LOG_INIT()                       \
     logfile_p = fopen(logfile_name, "a"); \

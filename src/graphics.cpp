@@ -59,6 +59,7 @@ void RenderTarget::drawSprite(const Point2D start, const Size2D size, const Imag
 }
 
 void BaseWindow::runEventCycle() {
+    LOG_PRINT("Test from gr\n");
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))
