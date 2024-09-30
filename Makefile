@@ -10,11 +10,16 @@ INCLUDE_FLAGS    = -I $(HEADER_FILES_DIR)
 BUILD_FLAGS      = $(DEBUG_FLAGS) $(SANITIZER_FLAGS)
 LINKER_FLAGS     = $(SFML_FLAGS) -lasan
 
-all: graphics.o
-	$(COMPILER) $(SFML_FLAGS) $(SANITIZER_FLAGS) $(INCLUDE_FLAGS) graphics.o main.cpp -o planet_sim
+OBJECT_FILES = graphics.o log.o
+
+all: $(OBJECT_FILES)
+	$(COMPILER) $(SFML_FLAGS) $(SANITIZER_FLAGS) $(INCLUDE_FLAGS) $(OBJECT_FILES) main.cpp -o planet_sim
 
 graphics.o:
 	$(COMPILER) -c $(DEBUG_FLAGS) $(INCLUDE_FLAGS) src/graphics.cpp
+
+log.o:
+	$(COMPILER) -c $(DEBUG_FLAGS) $(INCLUDE_FLAGS) src/log.cpp
 
 clean:
 	rm *.o

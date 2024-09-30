@@ -5,17 +5,10 @@
 #include <cstdlib>
 #include <ctime>
 
-static const char *const logfile_name = "logs.txt";
+void closeLogFile();
+void dbgPrint(const char *const fmt, ...);
 
-static FILE *logfile_p = nullptr;
-
-static void closeLogFile() {
-    fclose(logfile_p);
-}
-
-#define LOG_INIT()                       \
-    logfile_p = fopen(logfile_name, "a"); \
-    atexit(closeLogFile);
+#define LOG_INIT() atexit(closeLogFile)
 
 #define LOG_PRINT(string)                                                      \
     if (logfile_p) {                                                            \

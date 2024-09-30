@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include "base/log.h"
 
 void RenderTarget::drawLine(const Point2D start, const Point2D end, const sf::Color color) {
     sf::VertexArray line(sf::LinesStrip, 2);
