@@ -15,7 +15,7 @@ public:
         texture () 
     {
         if (!texture.loadFromFile(img_path)) {
-            LOG_PRINT("Could not open file!");
+            dbgPrint("Could not open file!");
         }
     }
 

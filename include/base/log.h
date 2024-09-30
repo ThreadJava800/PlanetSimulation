@@ -8,9 +8,7 @@
 void closeLogFile();
 void dbgPrint(const char *const fmt, ...);
 
-#define LOG_INIT()                       \
-    logfile_p = fopen(logfile_name, "a"); \
-    atexit(closeLogFile);
+#define LOG_INIT() atexit(closeLogFile)
 
 #define LOG_PRINT(string)                                                      \
     if (logfile_p) {                                                            \

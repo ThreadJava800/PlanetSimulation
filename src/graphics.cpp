@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include "base/log.h"
 
 void RenderTarget::drawLine(const Point2D start, const Point2D end, const sf::Color color) {
     sf::VertexArray line(sf::LinesStrip, 2);
@@ -59,7 +60,6 @@ void RenderTarget::drawSprite(const Point2D start, const Size2D size, const Imag
 }
 
 void BaseWindow::runEventCycle() {
-    LOG_PRINT("Test from gr\n");
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))
