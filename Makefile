@@ -10,16 +10,21 @@ INCLUDE_FLAGS    = -I $(HEADER_FILES_DIR)
 BUILD_FLAGS      = $(DEBUG_FLAGS) $(SANITIZER_FLAGS)
 LINKER_FLAGS     = $(SFML_FLAGS) -lasan
 
-all: graphics.o
-	$(COMPILER) $(SFML_FLAGS) $(SANITIZER_FLAGS) $(INCLUDE_FLAGS) graphics.o main.cpp -o planet_sim
+OBJECT_FILES = graphics.o log.o
+
+all: $(OBJECT_FILES)
+	$(COMPILER) $(SFML_FLAGS) $(SANITIZER_FLAGS) $(INCLUDE_FLAGS) $(OBJECT_FILES) main.cpp -o planet_sim
 
 graphics.o:
 	$(COMPILER) -c $(DEBUG_FLAGS) $(INCLUDE_FLAGS) src/graphics.cpp
 
 wind:
 	g++ -std=c++23 -D WIND -IC:\SFML-2.5.1\include -LC:\SFML-2.5.1\lib $(INCLUDE_FLAGS)						\
-main.cpp ./src/graphics.cpp   																			\
--lm -o test.exe -lmingw32 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-main -mwindows
+	main.cpp ./src/graphics.cpp   																			\
+	-lm -o test.exe -lmingw32 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-main -mwindows
+
+log.o:
+	$(COMPILER) -c $(DEBUG_FLAGS) $(INCLUDE_FLAGS) src/log.cpp
 
 clean:
 	rm *.o
