@@ -3,7 +3,7 @@
 #include "base/log.h"
 #include "settings.h"
 
-static FILE *logfile_p = fopen(LOGFILE_NAME, "a");
+static FILE *logfile_p = fopen(LOGFILE_NAME, "w");
 
 void closeLogFile() {
     fclose(logfile_p);

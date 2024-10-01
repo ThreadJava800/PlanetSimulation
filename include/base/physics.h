@@ -1,6 +1,7 @@
 #ifndef __PHYS_CONST_H__
 #define __PHYS_CONST_H__
 
+#include "point.h"
 #include "settings.h"
 
 /// Gravitational constant
@@ -14,9 +15,10 @@ static const DOUBLE EARTH_MASS = 5.9722 * 1e24; // kg
 static const DOUBLE EARTH_TO_SUN = 150.12 * 1e6; // km
 
 /// Newton's law of universal gravitation
-inline DOUBLE universalGravitation(const DOUBLE mass1, const DOUBLE mass2, const DOUBLE distance) {
+inline Vector2D universalGravitation(const DOUBLE mass1, const DOUBLE mass2, const Vector2D distance) {
     // -> Newtons
-    return G * (mass1 / distance) * (mass2 / distance);
+    const DOUBLE dist_abs = distance.getLen();
+    return (G * (mass1 / dist_abs) * (mass2 / dist_abs)) * (distance / dist_abs);
 }
 
 /// Gravitational field

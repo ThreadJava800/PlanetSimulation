@@ -40,22 +40,22 @@ public:
         return texture.getTexture();
     }
 
-    void drawLine(const Point2D start, const Point2D end, const sf::Color color);
+    void drawLine(const Vector2D start, const Vector2D end, const sf::Color color);
     void drawRect(
-            const Point2D start, 
-            const Size2D size, 
+            const Vector2D start, 
+            const Vector2D size, 
             const sf::Color fill_col, 
             const sf::Color out_col, 
             const float out_thickness = OUTLINE_THICKNESS
         );
     void drawCircle(
-            const Point2D lu, 
+            const Vector2D lu, 
             const float radius, 
             const sf::Color out_col, 
             const sf::Color fill_col, 
             const float out_thickness = OUTLINE_THICKNESS
         );
-    void drawSprite(const Point2D start, const Size2D size, const Image img);
+    void drawSprite(const Vector2D start, const Vector2D size, const Image img);
     void display();
 
     bool hasChanged() {
@@ -73,19 +73,20 @@ private:
 class Renderable {
 public:
     virtual void draw(RenderTarget& render_target) = 0;
-    virtual void update(const double delta_time) {} ;
     virtual ~Renderable() {}
 };
 
+class Space;
+
 class BaseWindow {
 public:
-    explicit BaseWindow(const char *const win_name) :
+    explicit BaseWindow(const char *const win_name, Space& space_) :
         pos          (0, 0),
         size         (SCREEN_WIDTH, SCREEN_HEIGHT),
         window       (sf::VideoMode(size.x, size.y), win_name, sf::Style::None),
         sprite       (),
         draw_target  (size),
-        draw_objects ()
+        space        (space_)
     {
         window.setPosition(pos);
         sprite.setPosition(static_cast<float>(pos.x), static_cast<float>(pos.y));
@@ -96,27 +97,10 @@ public:
         window.close();
     }
 
-    void update(const double delta_time) {
-        for (auto obj : draw_objects) {
-            if (obj) {
-                obj->update(delta_time);
-                obj->draw(draw_target);
-            }
-        }
-        if (draw_target.hasChanged()) {
-            window.clear(sf::Color::Transparent);
-            window.draw(sprite);
-            window.display();
-            draw_target.finishDraw();
-        }
-    }
+    void update(const double delta_time);
 
     const RenderTarget& getRT() const {
         return draw_target;
-    }
-
-    void registerObject(Renderable *const obj) {
-        draw_objects.push_back(obj);
     }
 
     void runEventCycle();
@@ -127,7 +111,7 @@ private:
     sf::RenderWindow window;
     sf::Sprite sprite;
     RenderTarget draw_target;
-    std::vector<Renderable*> draw_objects; // objects free themselves
+    Space& space;
 };
 
 #endif

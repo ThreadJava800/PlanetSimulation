@@ -13,23 +13,23 @@ inline bool doubleCmp(const DOUBLE a, const DOUBLE b) {
     return std::abs(a - b) < epsilon;
 }
 
-struct Point2D {
+struct Vector2D {
     DOUBLE x = 0;
     DOUBLE y = 0;
 
-    Point2D() :
+    Vector2D() :
         x (0),
         y (0)
     {}
-    Point2D(const double _x, const double _y) :
+    Vector2D(const double _x, const double _y) :
         x (_x),
         y (_y)
     {}
-    explicit Point2D(const sf::Vector2f _point) :
+    explicit Vector2D(const sf::Vector2f _point) :
         x (_point.x),
         y (_point.y)
     {}
-    explicit Point2D(const sf::Vector2i _point) :
+    explicit Vector2D(const sf::Vector2i _point) :
         x (_point.x),
         y (_point.y)
     {}
@@ -42,30 +42,39 @@ struct Point2D {
         return std::isnan(x) || std::isnan(y);
     }
 
-    DOUBLE getLen() {
+    DOUBLE getLen() const {
         return std::sqrt(x * x + y * y);
     }
 
-    friend void operator+=(Point2D& a, const Point2D& b) {
+    friend void operator+=(Vector2D& a, const Vector2D& b) {
         a.x += b.x;
         a.y += b.y;
     }
-    friend Point2D operator+(const Point2D& a, const Point2D& b) {
-        Point2D res = a;
+    friend Vector2D operator+(const Vector2D& a, const Vector2D& b) {
+        Vector2D res = a;
         res += b;
         return res;
     }
-    friend void operator-=(Point2D& a, const Point2D& b) {
+    friend void operator-=(Vector2D& a, const Vector2D& b) {
         a.x -= b.x;
         a.y -= b.y;
     }
-    friend Point2D operator-(const Point2D& a, const Point2D& b) {
-        Point2D res = a;
+    friend Vector2D operator-(const Vector2D& a, const Vector2D& b) {
+        Vector2D res = a;
         res -= b;
         return res;
     }
-    friend bool operator==(const Point2D& a, const Point2D& b) {
+    friend bool operator==(const Vector2D& a, const Vector2D& b) {
         return doubleCmp(a.x, b.x) && doubleCmp(a.y, b.y);
+    }
+    friend Vector2D operator*(const double scalar, const Vector2D& a) {
+        return Vector2D(a.x * scalar, a.y * scalar);
+    }
+    friend Vector2D operator*(const Vector2D& a, const double scalar) {
+        return Vector2D(a.x * scalar, a.y * scalar);
+    }
+    friend Vector2D operator/(const Vector2D& a, const double scalar) {
+        return Vector2D(a.x / scalar, a.y / scalar);
     }
 };
 
@@ -103,7 +112,7 @@ struct Point3D {
         return std::isnan(x) || std::isnan(y) || std::isnan(z);
     }
 
-    DOUBLE getLen() {
+    DOUBLE getLen() const {
         return std::sqrt(x * x + y * y + z * z);
     }
 
@@ -131,22 +140,5 @@ struct Point3D {
         return doubleCmp(a.x, b.x) && doubleCmp(a.y, b.y) && doubleCmp(a.z, b.z);
     }
 };
-
-static sf::Vector2f normalize(const sf::Vector2f &v) {
-    double len = sqrt(v.x * v.x + v.y * v.y);
-
-    return sf::Vector2f(v.x / len, v.y / len);
-}
-
-static sf::Vector2f makeVector(const Point2D &a, const Point2D &b) {
-    return sf::Vector2f(b.x - a.x, b.y - a.y);
-}
-
-static sf::Vector2f ortogVector(const sf::Vector2f &v) {
-    return sf::Vector2f(-v.y, v.x);
-}
-
-using Size2D = Point2D;
-using Size3D = Point3D;
 
 #endif
