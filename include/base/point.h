@@ -132,18 +132,18 @@ struct Point3D {
     }
 };
 
-sf::Vector2f normalize(const sf::Vector2f &v) {
+static sf::Vector2f normalize(const sf::Vector2f &v) {
     double len = sqrt(v.x * v.x + v.y * v.y);
 
-    return sf::Vector(v.x / len, v.y / len);
+    return sf::Vector2f(v.x / len, v.y / len);
 }
 
-sf::Vector2f makeVector(const Point2D &a, const Point2D &b) {
+static sf::Vector2f makeVector(const Point2D &a, const Point2D &b) {
     return sf::Vector2f(b.x - a.x, b.y - a.y);
 }
 
-sf::Vector2f ortogVector(const sf::Vector2f &v) {
-    return sf::Vector(-v.b, v.a);
+static sf::Vector2f ortogVector(const sf::Vector2f &v) {
+    return sf::Vector2f(-v.y, v.x);
 }
 
 using Size2D = Point2D;

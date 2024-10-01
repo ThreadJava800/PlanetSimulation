@@ -73,6 +73,7 @@ private:
 class Renderable {
 public:
     virtual void draw(RenderTarget& render_target) = 0;
+    virtual void update(const double delta_time) {} ;
     virtual ~Renderable() {}
 };
 

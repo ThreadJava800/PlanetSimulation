@@ -9,7 +9,7 @@ int main() {
 
     Space space;
     Sun sun({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
-    Earth earth({100, 100}, sun.getPos());
+    Earth earth(100, {100, 100}, sun.getPos());
     space.addObject(&sun);
     space.addObject(&earth);
     main_window.registerObject(&space);

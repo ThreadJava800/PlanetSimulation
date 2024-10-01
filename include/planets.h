@@ -8,6 +8,7 @@
 
 class SpaceObject : public Renderable {
 public:
+    // force + delta
     virtual void update(const SpaceObject &object, double delta_time) {}
 
     SpaceObject(const Point2D _pos, const double _mass, const double _radius, const char *const img_path) :
@@ -38,22 +39,21 @@ private:
 class Sun : public SpaceObject {
 public:
     Sun(const Point2D pos) :
-        SpaceObject (pos, "assets/sun.jpg")
+        SpaceObject (pos, SUN_MASS, EARTH_TO_SUN, "assets/sun.jpg")
     {}
 };
 
 class Earth : public SpaceObject {
 public:
     Earth(const double velocity, const Point2D pos, const Point2D _sun_pos) :
-        SpaceObject (pos, "assets/earth.jpg"),
-        sun_pos     (_sun_pos),
-        abs_vel     (velocity)
-        vel_dir     (normalize(ortogVector(makeVector(pos, sun_pos))))
+        SpaceObject (pos, EARTH_MASS, EARTH_TO_SUN, "assets/earth.jpg"),
+        abs_vel     (velocity),
+        vel_dir     (normalize(ortogVector(makeVector(pos, pos))))
     {}
 
     void update(const SpaceObject &object, const double delta_time) override {
         accel   = makeVector(pos, object.getPos());
-        vel_dir = normalize(ortogVector(accel_dir));
+        vel_dir = normalize(ortogVector(vel_dir));
     }
 
 private:
@@ -70,13 +70,13 @@ public:
         objects.push_back(object);
     }
 
-    void update(const double delta_time) {
+    void update(const double delta_time) override {
         for (size_t first_obj = 0; first_obj < objects.size(); first_obj++) {
             for (size_t second_obj = 0; second_obj < objects.size(); second_obj++) {
-                auto first = &object[first_obj];
-                auto second = &object[second_obj];
-                first->update(second, delta_time);
-                second->update(first, delta_time);
+                auto first = objects[first_obj];
+                auto second = objects[second_obj];
+                first->update(*second, delta_time);
+                second->update(*first, delta_time);
             }
         }
     }

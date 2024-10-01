@@ -60,6 +60,7 @@ void RenderTarget::drawSprite(const Point2D start, const Size2D size, const Imag
 }
 
 void BaseWindow::runEventCycle() {
+    sf::Clock clk;
     while (window.isOpen()) {
         sf::Event event;
         double last_time = 0;
