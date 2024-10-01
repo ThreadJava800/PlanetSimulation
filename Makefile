@@ -20,7 +20,7 @@ graphics.o:
 
 wind:
 	g++ -std=c++23 -D WIND -IC:\SFML-2.5.1\include -LC:\SFML-2.5.1\lib $(INCLUDE_FLAGS)						\
-	main.cpp ./src/graphics.cpp   																			\
+	main.cpp ./src/graphics.cpp ./src/log.cpp 															\
 	-lm -o test.exe -lmingw32 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-main -mwindows
 
 log.o:
