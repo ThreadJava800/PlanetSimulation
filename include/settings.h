@@ -1,7 +1,7 @@
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
-using DOUBLE = long double;
+using DOUBLE = double;
 
 /// Basic window size
 static const unsigned SCREEN_WIDTH  = 1920;

@@ -18,7 +18,7 @@ static const DOUBLE EARTH_TO_SUN = 150.12 * 1e6; // km
 inline Vector2D universalGravitation(const DOUBLE mass1, const DOUBLE mass2, const Vector2D distance) {
     // -> Newtons
     const DOUBLE dist_abs = distance.getLen();
-    return (G * (mass1 / dist_abs) * (mass2 / dist_abs)) * (distance / dist_abs);
+    return (75.67 * (mass1 / dist_abs) * (mass2 / dist_abs)) * (distance / dist_abs);
 }
 
 /// Gravitational field
