@@ -23,6 +23,11 @@ wind:
 	main.cpp ./src/graphics.cpp ./src/log.cpp 															\
 	-lm -o test.exe -lmingw32 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-main -mwindows
 
+mac:
+	clang++ -std=c++23 -I/opt/homebrew/Cellar/sfml/2.6.1/include -L/opt/homebrew/Cellar/sfml/2.6.1/lib $(INCLUDE_FLAGS) \
+	main.cpp ./src/graphics.cpp ./src/log.cpp 															     			\
+	-lm -o test $(SFML_FLAGS)																			     			\
+
 log.o:
 	$(COMPILER) -c $(DEBUG_FLAGS) $(INCLUDE_FLAGS) src/log.cpp
 
