@@ -34,7 +34,7 @@ const char *const IMAGE_PATHS[NR_PLANETS] =
     [EARTH]   = "assets/earth.png"  ,
     [MARS]    = "assets/mars.png"   ,
     [JUPITER] = "assets/jupiter.png",
-    [SATURN]  = "assets/saturn.jpg" ,
+    [SATURN]  = "assets/saturn.png" ,
     [URANUS]  = "assets/uranus.png" ,
     [NEPTUNE] = "assets/neptune.jpg",
 };
