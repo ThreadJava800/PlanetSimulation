@@ -65,6 +65,13 @@ private:
 
 class Space : public Renderable {
 public:
+
+    Space(const char *const img_path):
+        asset    (img_path),
+        pos      (0, 0),
+        size     (SCREEN_WIDTH, SCREEN_HEIGHT)
+    {}
+
     void addObject(SpaceObject *const object) {
         objects.push_back(object);
     }
@@ -93,6 +100,7 @@ public:
     }
 
     void draw(RenderTarget& render_target) override {
+        render_target.drawSprite(pos, size, asset);
         for (auto object : objects) {
             object->draw(render_target);
         }
@@ -105,6 +113,10 @@ public:
     }
 private:
     std::vector<SpaceObject*> objects;
+
+    Image    asset;
+    Vector2D   pos;
+    Vector2D  size;
 };
 
 #endif

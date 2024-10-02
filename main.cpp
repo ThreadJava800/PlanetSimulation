@@ -6,7 +6,7 @@
 int main() {
     LOG_INIT();
 
-    Space space;
+    Space space("assets/space.jpg");
     BaseWindow main_window(WINDOW_NAME, space);
 
     space.addObject(new SpaceObject("assets/earth.jpg", {800, 200}, 1     , {200, 0}));
