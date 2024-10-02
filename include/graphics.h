@@ -92,7 +92,7 @@ public:
     explicit BaseWindow(const char *const win_name, Space& space_) :
         pos          (0, 0),
         size         (SCREEN_WIDTH, SCREEN_HEIGHT),
-        window       (sf::VideoMode(size.x, size.y), win_name, sf::Style::None),
+        window       (sf::VideoMode(size.x, size.y), win_name),
         sprite       (),
         draw_target  (size),
         space        (space_)
