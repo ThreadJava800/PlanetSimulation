@@ -5,6 +5,10 @@
 
 int main() {
     LOG_INIT();
+    dbgPrint(
+        "MG  = %lf\n"
+        "ACC = %lf\n"
+        "VEL = %lf\n", MG, ACCELERATION_UNIT, VELOCITY_UNIT);
 
     Space space;
     BaseWindow main_window(WINDOW_NAME, space);

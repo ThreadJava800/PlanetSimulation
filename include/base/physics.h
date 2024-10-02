@@ -6,8 +6,8 @@
 #include "settings.h"
 
 /// Pow
-static inline double pow2(double value) { return value * value; }
-static inline double pow3(double value) { return value * value * value; }
+static inline DOUBLE pow2(DOUBLE value) { return value * value; }
+static inline DOUBLE pow3(DOUBLE value) { return value * value * value; }
 
 /// Planets
 enum PLANET_TYPE
@@ -26,10 +26,10 @@ enum PLANET_TYPE
 };
 
 /// Mass
-using Pkg = double;
-using Mkg = double;
+using Pkg = DOUBLE;
+using Mkg = DOUBLE;
 
-static const double MASS_UNIT = 5.972e24; // 1 Mkg = (MASS_UNIT) Pkg
+static const DOUBLE MASS_UNIT = 5.972e24; // 1 Mkg = (MASS_UNIT) Pkg
 
 static inline Mkg Pkg_to_Mkg(Pkg value) { return value / MASS_UNIT; }
 static inline Pkg Mkg_to_Pkg(Mkg value) { return value * MASS_UNIT; }
@@ -48,13 +48,19 @@ static const Mkg MASSES[NR_PLANETS] =
 };
 
 /// Distance constants
-using Pkm = double;
-using Mkm = double;
+using Pkm = DOUBLE;
+using Mkm = DOUBLE;
 
-static const double DISTANCE_UNIT = 150.12e4; // 1 Mkm = (DISTANCE_UNIT) Pkm
+using Vector2Pkm = Vector2D;
+using Vector2Mkm = Vector2D;
+
+static const DOUBLE DISTANCE_UNIT = 150.12e4; // 1 Mkm = (DISTANCE_UNIT) Pkm
 
 static inline Mkm Pkm_to_Mkm(Pkm value) { return value / DISTANCE_UNIT; }
 static inline Pkm Mkm_to_Pkm(Mkm value) { return value * DISTANCE_UNIT; }
+
+static inline Vector2Mkm Vector2Pkm_to_Vector2Mkm(Vector2Pkm value) { return value / DISTANCE_UNIT; }
+static inline Vector2Pkm Vector2Mkm_to_Vector2Pkm(Vector2Mkm value) { return value * DISTANCE_UNIT; }
 
 static const Mkm DISTANCES[NR_PLANETS] =
 {
@@ -70,22 +76,28 @@ static const Mkm DISTANCES[NR_PLANETS] =
 };
 
 /// Time constants
-using Psec = double;
-using Msec = double;
+using Psec = DOUBLE;
+using Msec = DOUBLE;
 
-static const double TIME_UNIT = 3167239.624; // 1 Msec = (TIME_UNIT) Psec ~ 37 суток
+static const DOUBLE TIME_UNIT = 3167239.624; // 1 Msec = (TIME_UNIT) Psec ~ 37 суток
 
 static inline Msec Psec_to_Msec(Psec value) { return value / TIME_UNIT; }
 static inline Psec Msec_to_Psec(Msec value) { return value * TIME_UNIT; }
 
 /// Velocity constants
-using Pkm_in_sec = double;
-using Mkm_in_sec = double;
+using Pkm_in_sec = DOUBLE;
+using Mkm_in_sec = DOUBLE;
 
-static const double VELOCITY_UNIT = (DISTANCE_UNIT / TIME_UNIT); // 1 Mkm_in_sec = (VELOCITY_UNIT) Pkm_in_sec
+using Vector2Pkm_in_sec = Vector2D;
+using Vector2Mkm_in_sec = Vector2D;
+
+static const DOUBLE VELOCITY_UNIT = (DISTANCE_UNIT / TIME_UNIT); // 1 Mkm_in_sec = (VELOCITY_UNIT) Pkm_in_sec
 
 static inline Mkm_in_sec Pkm_in_sec_to_Mkm_in_sec(Pkm_in_sec value) { return value / VELOCITY_UNIT; }
 static inline Pkm_in_sec Mkm_in_sec_to_Pkm_in_sec(Mkm_in_sec value) { return value * VELOCITY_UNIT; }
+
+static inline Vector2Mkm_in_sec Vector2Pkm_in_sec_to_Vector2Mkm_in_sec(Vector2Pkm value) { return value / VELOCITY_UNIT; }
+static inline Vector2Pkm_in_sec Vector2Mkm_in_sec_to_Vector2Pkm_in_sec(Vector2Mkm value) { return value * VELOCITY_UNIT; }
 
 static const Mkm_in_sec VELOCITIES[NR_PLANETS] =
 {
@@ -101,24 +113,26 @@ static const Mkm_in_sec VELOCITIES[NR_PLANETS] =
 };
 
 /// Acceleration constants
-using Pkm_in_sec2 = double;
-using Mkm_in_sec2 = double;
+using Pkm_in_sec2 = DOUBLE;
+using Mkm_in_sec2 = DOUBLE;
 
-static const double ACCELERATION_UNIT = (DISTANCE_UNIT / (TIME_UNIT * TIME_UNIT)); // 1 Mkm_in_sec2 = (ACCELERATION_UNIT) Pkm_in_sec2
+using Vector2Pkm_in_sec2 = Vector2D;
+using Vector2Mkm_in_sec2 = Vector2D;
+
+static const DOUBLE ACCELERATION_UNIT = (DISTANCE_UNIT / (TIME_UNIT * TIME_UNIT)); // 1 Mkm_in_sec2 = (ACCELERATION_UNIT) Pkm_in_sec2
 
 static inline Mkm_in_sec2 Pkm_in_sec2_to_Mkm_in_sec2(Pkm_in_sec2 value) { return value / ACCELERATION_UNIT; }
 static inline Pkm_in_sec2 Mkm_in_sec2_to_Pkm_in_sec2(Mkm_in_sec2 value) { return value * ACCELERATION_UNIT; }
 
+static inline Vector2Mkm_in_sec2 Vector2Pkm_in_sec2_to_Vector2Mkm_in_sec2(Vector2Pkm value) { return value / ACCELERATION_UNIT; }
+static inline Vector2Pkm_in_sec2 Vector2Mkm_in_sec2_to_Vector2Pkm_in_sec2(Vector2Mkm value) { return value * ACCELERATION_UNIT; }
+
 /// Gravitational constant
-static const double PG = (6.6743 * 1e-20);                                           // Pkm3 * Pkg(-1) * Psec(-2)
-static const double MG = PG * pow3(1 / DISTANCE_UNIT) * MASS_UNIT * pow2(TIME_UNIT); // Mkm3 * Mkg(-1) * Msec(-2)
+static const DOUBLE PG = (6.6743 * 1e-20);                                           // Pkm3 * Pkg(-1) * Psec(-2)
+static const DOUBLE MG = PG * pow3(1 / DISTANCE_UNIT) * MASS_UNIT * pow2(TIME_UNIT); // Mkm3 * Mkg(-1) * Msec(-2)
 
 /// Laws
-inline Vector2D universalGravitation(const Mkg mass1, const Mkg mass2, const Vector2D distance) {
-    dbgPrint(
-        "MG  = %lf\n"
-        "ACC = %lf\n"
-        "VEL = %lf\n", MG, ACCELERATION_UNIT, VELOCITY_UNIT);
+inline Vector2D universalGravitation(const Mkg mass1, const Mkg mass2, const Vector2Mkm distance) {
     const Mkm dist_abs = distance.getLen();
     return (MG * mass1 * mass2) / (dist_abs * dist_abs) * (distance / dist_abs);
 }
