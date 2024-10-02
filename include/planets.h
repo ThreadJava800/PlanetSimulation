@@ -34,23 +34,23 @@ public:
             "============(Ну ПИСЮН и ПИСЮН, чего кричать-то?)============\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
     }
 
-    Vector2D getPos()   const { return pos;   }
-    Mkg      getMass()  const { return mass;  }
-    Vector2D getVeloc() const { return veloc; }
+    Vector2Mkm        getPos()   const { return pos;   }
+    Mkg               getMass()  const { return mass;  }
+    Vector2Mkm_in_sec getVeloc() const { return veloc; }
 
-    Vector2D accel; // Mkm_in_sec2
+    Vector2Mkm_in_sec2 accel;
 
 protected:
-    Vector2D pos;   // Mkm
-    Mkg      mass;  // Mkg
-    Vector2D veloc; // Mkm_in_sec
+    Vector2Mkm        pos;
+    Mkg               mass;
+    Vector2Mkm_in_sec veloc;
 };
 
-class SpaceObject : public Renderable, public Physical {
+class Planet : public Renderable, public Physical {
 public:
-    SpaceObject(const char *const img_path, const Vector2D _pos, const double _mass, const Vector2D _veloc = Vector2D()) :
-        Physical (_pos, _mass, _veloc),
-        asset    (img_path)
+    Planet(const PLANET_TYPE _type, const Vector2Mkm _zero_pos) :
+        Physical ({_zero_pos.x, _zero_pos.y - DISTANCES[_type]}, MASSES[_type], {VELOCITIES[_type], 0}),
+        asset    (IMAGE_PATHS[_type])
     {}
 
     void draw(RenderTarget& render_target) override {
@@ -70,18 +70,18 @@ public:
         size     (SCREEN_WIDTH, SCREEN_HEIGHT)
     {}
 
-    void addObject(SpaceObject *const object) {
-        objects.push_back(object);
+    void addPlanet(Planet *const planet) {
+        planets.push_back(planet);
     }
 
     void update(const double delta_time) {
-        for (size_t first_obj = 0; first_obj < objects.size(); first_obj++) {
-            auto first = objects[first_obj];
+        for (size_t first_pln = 0; first_pln < planets.size(); first_pln++) {
+            auto first = planets[first_pln];
             Vector2D force;
-            for (size_t second_obj = 0; second_obj < objects.size(); second_obj++) {
-                if (first_obj == second_obj) continue;
+            for (size_t second_pln = 0; second_pln < planets.size(); second_pln++) {
+                if (first_pln == second_pln) continue;
 
-                auto second = objects[second_obj];
+                auto second = planets[second_pln];
                 force += 
                     universalGravitation (
                         first ->getMass(), 
@@ -99,18 +99,18 @@ public:
 
     void draw(RenderTarget& render_target) override {
         render_target.drawSprite(pos, size, asset);
-        for (auto object : objects) {
+        for (auto object : planets) {
             object->draw(render_target);
         }
     }
 
     ~Space() {
-        for (const auto obj : objects) {
-            delete obj;
+        for (const auto planet : planets) {
+            delete planet;
         }
     }
 private:
-    std::vector<SpaceObject*> objects;
+    std::vector<Planet*> planets;
 
     Image    asset;
     Vector2D   pos;
