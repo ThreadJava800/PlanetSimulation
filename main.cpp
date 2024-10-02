@@ -9,8 +9,8 @@ int main() {
     Space space;
     BaseWindow main_window(WINDOW_NAME, space);
 
-    space.addObject(new SpaceObject({100, 100}, EARTH_MASS, "assets/earth.jpg"));
-    space.addObject(new SpaceObject({500, 500}, SUN_MASS, "assets/sun.jpg"));
+    space.addObject(new SpaceObject("assets/earth.jpg", {800, 200}, 1     , {200, 0}));
+    space.addObject(new SpaceObject("assets/sun.jpg"  , {800, 500}, 333000, {0  , 0}));
 
     main_window.runEventCycle();
 

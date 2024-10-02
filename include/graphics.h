@@ -65,6 +65,11 @@ public:
         has_changed = false;
     }
 
+    void clear()
+    {
+        texture.clear();
+    }
+
 private:
     sf::RenderTexture texture;
     bool has_changed;

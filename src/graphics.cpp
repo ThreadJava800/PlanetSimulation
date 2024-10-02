@@ -2,6 +2,8 @@
 #include "base/log.h"
 #include "planets.h"
 
+#include <chrono>
+
 void RenderTarget::drawLine(const Vector2D start, const Vector2D end, const sf::Color color) {
     sf::VertexArray line(sf::LinesStrip, 2);
     line[0].position = start;
@@ -60,15 +62,16 @@ void RenderTarget::drawSprite(const Vector2D start, const Vector2D size, const I
     has_changed = true;
 }
 
-void BaseWindow::update(const double delta_time) {
-    space.update(delta_time);
-    space.draw  (draw_target);
-    
+void BaseWindow::update(const double delta_time) {    
     if (draw_target.hasChanged()) {
-        window.clear(sf::Color::Transparent);
+        draw_target.clear();
+        window.clear(sf::Color::Black);
+
+        space.update(delta_time);
+        space.draw  (draw_target);
+
         window.draw(sprite);
         window.display();
-        draw_target.finishDraw();
     }
 }
 
@@ -76,7 +79,6 @@ void BaseWindow::runEventCycle() {
     sf::Clock clk;
     while (window.isOpen()) {
         sf::Event event;
-        double last_time = 0;
 
         while (window.pollEvent(event))
         {
@@ -87,11 +89,7 @@ void BaseWindow::runEventCycle() {
             }
         }
 
-        uint64_t current_time = clk.getElapsedTime().asMicroseconds();
-        if (current_time - last_time >= 10000) {
-            double dt = (double)(current_time - last_time) / 1e6;
-            update(dt);
-            last_time = current_time;
-        }
+        double delta_time = clk.restart().asMicroseconds() / 1e6;
+        update(delta_time);
     }
 }
