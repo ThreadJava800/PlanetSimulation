@@ -29,13 +29,13 @@ enum PLANET_TYPE
 const char *const IMAGE_PATHS[NR_PLANETS] =
 {
     [SUN]     = "assets/sun.png"    ,
-    [MERCURY] = "assets/mercury.jpg",
+    [MERCURY] = "assets/mercury.png",
     [VENUS]   = "assets/venus.jpg"  ,
     [EARTH]   = "assets/earth.png"  ,
-    [MARS]    = "assets/mars.jpg"   ,
-    [JUPITER] = "assets/jupiter.jpg",
+    [MARS]    = "assets/mars.png"   ,
+    [JUPITER] = "assets/jupiter.png",
     [SATURN]  = "assets/saturn.jpg" ,
-    [URANUS]  = "assets/uranus.jpg" ,
+    [URANUS]  = "assets/uranus.png" ,
     [NEPTUNE] = "assets/neptune.jpg",
 };
 
