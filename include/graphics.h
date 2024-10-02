@@ -14,9 +14,13 @@ public:
     explicit Image(const char *const img_path) :
         texture () 
     {
-        if (!texture.loadFromFile(img_path)) {
+        sf::Image image;
+        if (!image.loadFromFile(img_path)) {
             dbgPrint("Could not open file!");
         }
+        image.createMaskFromColor(sf::Color::Black);
+
+        texture.loadFromImage(image);
     }
 
     const sf::Texture* getTexture() const {
