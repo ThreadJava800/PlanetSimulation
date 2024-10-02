@@ -25,6 +25,20 @@ enum PLANET_TYPE
     NR_PLANETS
 };
 
+// Assets
+const char *const IMAGE_PATHS[NR_PLANETS] =
+{
+    [SUN]     = "assets/sun.png"    ,
+    [MERCURY] = "assets/mercury.jpg",
+    [VENUS]   = "assets/venus.jpg"  ,
+    [EARTH]   = "assets/earth.png"  ,
+    [MARS]    = "assets/mars.jpg"   ,
+    [JUPITER] = "assets/jupiter.jpg",
+    [SATURN]  = "assets/saturn.jpg" ,
+    [URANUS]  = "assets/uranus.jpg" ,
+    [NEPTUNE] = "assets/neptune.jpg",
+};
+
 /// Mass
 using Pkg = DOUBLE;
 using Mkg = DOUBLE;

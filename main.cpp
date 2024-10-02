@@ -13,20 +13,8 @@ int main() {
     Space space;
     BaseWindow main_window(WINDOW_NAME, space);
 
-    const char *const planets[NR_PLANETS] =
-    {
-        [SUN]     = "assets/sun.png"    ,
-        [MERCURY] = "assets/mercury.jpg",
-        [VENUS]   = "assets/venus.jpg"  ,
-        [EARTH]   = "assets/earth.png"  ,
-        [MARS]    = "assets/mars.jpg"   ,
-        [JUPITER] = "assets/jupiter.jpg",
-        [SATURN]  = "assets/saturn.jpg" ,
-        [URANUS]  = "assets/uranus.jpg" ,
-        [NEPTUNE] = "assets/neptune.jpg",
-    };
-    for (int planet = 0; planet < NR_PLANETS; ++planet)
-        space.addObject(new SpaceObject(planets[planet], {800, 500 - DISTANCES[planet]}, MASSES[planet]  , {VELOCITIES[planet]  , 0}));
+    for (int planet_idx = 0; planet_idx < NR_PLANETS; ++planet_idx)
+        space.addPlanet(new Planet((PLANET_TYPE) planet_idx, {800, 500}));
 
     main_window.runEventCycle();
 
