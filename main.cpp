@@ -9,16 +9,20 @@ int main() {
     Space space("assets/space.jpg");
     BaseWindow main_window(WINDOW_NAME, space);
 
-    space.addObject(new SpaceObject("assets/earth.jpg", {800, 200}, 1     , {200, 0}));
-    space.addObject(new SpaceObject("assets/sun.jpg"  , {800, 500}, 333000, {0  , 0}));
-
-    main_window.runEventCycle();
-
-    // Sun sun({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
-    // Earth earth(100, {100, 100}, sun.getPos());
-    // space.addObject(&sun);
-    // space.addObject(&earth);
-    // main_window.registerObject(&space);
+    const char *const planets[NR_PLANETS] =
+    {
+        [SUN]     = "assets/sun.png"    ,
+        [MERCURY] = "assets/mercury.jpg",
+        [VENUS]   = "assets/venus.jpg"  ,
+        [EARTH]   = "assets/earth.png"  ,
+        [MARS]    = "assets/mars.jpg"   ,
+        [JUPITER] = "assets/jupiter.jpg",
+        [SATURN]  = "assets/saturn.jpg" ,
+        [URANUS]  = "assets/uranus.jpg" ,
+        [NEPTUNE] = "assets/neptune.jpg",
+    };
+    for (int planet = 0; planet < NR_PLANETS; ++planet)
+        space.addObject(new SpaceObject(planets[planet], {800, 500 - DISTANCES[planet]}, MASSES[planet]  , {VELOCITIES[planet]  , 0}));
 
     main_window.runEventCycle();
 
