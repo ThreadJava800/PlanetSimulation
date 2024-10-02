@@ -30,7 +30,7 @@ const char *const IMAGE_PATHS[NR_PLANETS] =
 {
     [SUN]     = "assets/sun.png"    ,
     [MERCURY] = "assets/mercury.png",
-    [VENUS]   = "assets/venus.jpg"  ,
+    [VENUS]   = "assets/venus.png"  ,
     [EARTH]   = "assets/earth.png"  ,
     [MARS]    = "assets/mars.png"   ,
     [JUPITER] = "assets/jupiter.png",
