@@ -16,7 +16,8 @@ int main() {
     for (int planet_idx = 0; planet_idx < NR_PLANETS; ++planet_idx)
         space.addPlanet(new Planet((PLANET_TYPE) planet_idx, {800, 500}));
 
-    main_window.runEventCycle();
+    CycleChecker checker(space.getPlanet(EARTH), space.getPlanet(SUN));
+    main_window.runEventCycle(&checker);
 
     return 0;
 }

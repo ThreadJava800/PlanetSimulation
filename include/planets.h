@@ -104,6 +104,8 @@ public:
         }
     }
 
+    Planet *getPlanet(const size_t num) const { return planets[num]; }
+
     ~Space() {
         for (const auto planet : planets) {
             delete planet;
@@ -115,6 +117,42 @@ private:
     Image    asset;
     Vector2D   pos;
     Vector2D  size;
+};
+
+class CycleChecker {
+public:
+    explicit CycleChecker(const Planet *controlledObject, const Planet *referenceFrame):
+        ControlledObject(controlledObject),
+        ReferenceFrame(referenceFrame),
+        ReferenceVector(controlledObject->getPos() - referenceFrame->getPos()),
+        cycles(0)
+    {}
+
+    void update() {
+        Vector2D CurVector = ControlledObject->getPos() - ReferenceFrame->getPos();
+        DOUBLE CurOrientation = (ReferenceVector ^ CurVector);
+
+        if (CurOrientation * lastOrientation < 0) {
+            lastOrientation *= -1;
+            cycles++;
+        }
+    }
+
+    DOUBLE waitErrorRate() {
+        update();
+
+        if (cycles && cycles % 2 == 0)
+            return ((ControlledObject->getPos() - ReferenceFrame->getPos()) - ReferenceVector).getLen();
+        return -1;
+    }
+
+private:
+    uint32_t cycles;
+    DOUBLE lastOrientation = 1;
+
+    Vector2D ReferenceVector;
+    const Planet  *ReferenceFrame;
+    const Planet  *ControlledObject;
 };
 
 #endif

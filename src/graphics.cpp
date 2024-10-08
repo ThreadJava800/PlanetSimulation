@@ -75,8 +75,11 @@ void BaseWindow::update(const double delta_time) {
     }
 }
 
-void BaseWindow::runEventCycle() {
+void BaseWindow::runEventCycle(CycleChecker *cycle_checker) {
+    const double DELTA_TIME = 0.002;
+
     sf::Clock clk;
+    double timer = 0;
     while (window.isOpen()) {
         sf::Event event;
 
@@ -89,7 +92,17 @@ void BaseWindow::runEventCycle() {
             }
         }
 
-        double delta_time = clk.restart().asMicroseconds() / 1e6;
-        update(delta_time);
+        double delta_time = clk.restart().asMicroseconds();
+        timer += delta_time;
+        if (timer >= 1000) {
+            update(DELTA_TIME);
+            timer = 0;
+
+            if (cycle_checker != nullptr) {
+                DOUBLE errorRate = cycle_checker.waitErrorRate();
+
+                if (errorRate >= 0) dbgPrint("ErrorRate(Beta): %lg\n", errorRate);
+            }
+        }
     }
 }
