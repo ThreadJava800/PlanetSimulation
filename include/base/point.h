@@ -34,6 +34,16 @@ struct Vector2D {
         y (_point.y)
     {}
 
+    // Vector AB
+    explicit Vector2D(const sf::Vector2f _a, const sf::Vector2f _b):
+        x (_b.x - _a.x),
+        y (_b.y - _a.y)
+    {}
+    explicit Vector2D(const Vector2D _a, const Vector2D _b):
+        x (_b.x - _a.x),
+        y (_b.y - _a.y)
+    {}
+
     operator sf::Vector2f() const {
         return sf::Vector2f(static_cast<float>(x), static_cast<float>(y));
     }
@@ -75,6 +85,12 @@ struct Vector2D {
     }
     friend Vector2D operator/(const Vector2D& a, const double scalar) {
         return Vector2D(a.x / scalar, a.y / scalar);
+    }
+    friend DOUBLE operator,(const Vector2D &a, const Vector2D &b) {
+        return a.x * b.x + a.y * b.y;
+    }
+    friend DOUBLE operator^(const Vector2D &a, const Vector2D &b) {
+        return a.x * b.y - a.y * b.x;
     }
 };
 
