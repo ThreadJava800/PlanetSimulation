@@ -99,7 +99,7 @@ void BaseWindow::runEventCycle(CycleChecker *cycle_checker) {
             timer = 0;
 
             if (cycle_checker != nullptr) {
-                DOUBLE errorRate = cycle_checker.waitErrorRate();
+                DOUBLE errorRate = cycle_checker->waitErrorRate();
 
                 if (errorRate >= 0) dbgPrint("ErrorRate(Beta): %lg\n", errorRate);
             }

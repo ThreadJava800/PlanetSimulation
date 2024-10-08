@@ -16,22 +16,22 @@ public:
     {}
 
     void update (const Msec delta_time) {
-        dbgPrint("============UPDATE(ОШАЛЕТЬ, ПИСЮН!)============\n"
-            "accel = (%lf, %lf)\n"
-            "veloc = (%lf, %lf)\n"
-            "pos   = (%lf, %lf)\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
+        // dbgPrint("============UPDATE(ОШАЛЕТЬ, ПИСЮН!)============\n"
+        //     "accel = (%lf, %lf)\n"
+        //     "veloc = (%lf, %lf)\n"
+        //     "pos   = (%lf, %lf)\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
 
-        dbgPrint("\n"
-            "time = %lf\n", delta_time);
+        // dbgPrint("\n"
+        //     "time = %lf\n", delta_time);
 
         veloc += accel * delta_time;
         pos   += veloc * delta_time;
 
-        dbgPrint("\n"
-            "accel = (%lf, %lf)\n"
-            "veloc = (%lf, %lf)\n"
-            "pos   = (%lf, %lf)\n"
-            "============(Ну ПИСЮН и ПИСЮН, чего кричать-то?)============\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
+        // dbgPrint("\n"
+        //     "accel = (%lf, %lf)\n"
+        //     "veloc = (%lf, %lf)\n"
+        //     "pos   = (%lf, %lf)\n"
+        //     "============(Ну ПИСЮН и ПИСЮН, чего кричать-то?)============\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
     }
 
     Vector2Mkm        getPos()   const { return pos;   }
@@ -140,9 +140,12 @@ public:
 
     DOUBLE waitErrorRate() {
         update();
+        // dbgPrint("Cycles: %d, Orientation: %lg\n", cycles, lastOrientation);
+        if (cycles == 2) {
+            cycles = 0;
 
-        if (cycles && cycles % 2 == 0)
             return ((ControlledObject->getPos() - ReferenceFrame->getPos()) - ReferenceVector).getLen();
+        }
         return -1;
     }
 
