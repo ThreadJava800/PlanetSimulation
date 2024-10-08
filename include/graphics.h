@@ -86,6 +86,7 @@ public:
 };
 
 class Space;
+class CycleChecker;
 
 class BaseWindow {
 public:
@@ -112,7 +113,7 @@ public:
         return draw_target;
     }
 
-    void runEventCycle();
+    void runEventCycle(CycleChecker *checker = nullptr);
 
 private:
     sf::Vector2i pos;
