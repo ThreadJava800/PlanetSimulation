@@ -76,10 +76,12 @@ void BaseWindow::update(const double delta_time) {
 }
 
 void BaseWindow::runEventCycle(CycleChecker *cycle_checker) {
-    const double DELTA_TIME = 0.002;
+    double DELTA_TIME = 0.001;
 
     sf::Clock clk;
     double timer = 0;
+    uint32_t cycleCounter = 0;
+
     while (window.isOpen()) {
         sf::Event event;
 
@@ -96,12 +98,17 @@ void BaseWindow::runEventCycle(CycleChecker *cycle_checker) {
         timer += delta_time;
         if (timer >= 1000) {
             update(DELTA_TIME);
+            cycleCounter++;
             timer = 0;
 
             if (cycle_checker != nullptr) {
                 DOUBLE errorRate = cycle_checker->waitErrorRate();
 
-                if (errorRate >= 0) dbgPrint("ErrorRate(Beta): %lg\n", errorRate);
+                if (errorRate >= 0){
+                    dbgPrint("%u; %lg;\n", cycleCounter, errorRate);
+                    cycleCounter = 0;
+                    DELTA_TIME *= 1.5;
+                }
             }
         }
     }
