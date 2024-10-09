@@ -35,7 +35,7 @@ public:
     {}
 
     void update(const Msec delta_time, const Runge_Kutta rk4) {
-        dbgPrint("============UPDATE(ОШАЛЕТЬ, ПИСЮН!)============\n"
+        dbgPrint("============UPDATE============\n"
             "accel = (%lf, %lf)\n"
             "veloc = (%lf, %lf)\n"
             "pos   = (%lf, %lf)\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
@@ -50,7 +50,7 @@ public:
             "accel = (%lf, %lf)\n"
             "veloc = (%lf, %lf)\n"
             "pos   = (%lf, %lf)\n"
-            "============(Ну ПИСЮН и ПИСЮН, чего кричать-то?)============\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
+            "========================\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
     }
 
     Vector2Mkm         getPos  () const { return pos;   }
