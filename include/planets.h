@@ -35,10 +35,10 @@ public:
     {}
 
     void update(const Msec delta_time, const Runge_Kutta rk4) {
-        dbgPrint("============UPDATE(ОШАЛЕТЬ, ПИСЮН!)============\n"
-            "accel = (%lf, %lf)\n"
-            "veloc = (%lf, %lf)\n"
-            "pos   = (%lf, %lf)\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
+        // dbgPrint("============UPDATE(ОШАЛЕТЬ, ПИСЮН!)============\n"
+        //     "accel = (%lf, %lf)\n"
+        //     "veloc = (%lf, %lf)\n"
+        //     "pos   = (%lf, %lf)\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
 
         // dbgPrint("\n"
         //     "time = %lf\n", delta_time);

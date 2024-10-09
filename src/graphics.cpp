@@ -76,7 +76,7 @@ void BaseWindow::update(const double delta_time) {
 }
 
 void BaseWindow::runEventCycle(CycleChecker *cycle_checker) {
-    const DOUBLE DELTA_TIME = 0.0015;
+    DOUBLE DELTA_TIME = 0.001;
 
     sf::Clock clk;
     double timer = 0;
@@ -107,6 +107,7 @@ void BaseWindow::runEventCycle(CycleChecker *cycle_checker) {
                 if (errorRate >= 0){
                     dbgPrint("%u; %lg;\n", cycleCounter, errorRate);
                     cycleCounter = 0;
+                    DELTA_TIME *= 1.5;
                 }
             }
         }
