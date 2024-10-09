@@ -223,8 +223,10 @@ public:
         // dbgPrint("Cycles: %d, Orientation: %lg\n", cycles, lastOrientation);
         if (cycles == 2) {
             cycles = 0;
+            DOUBLE Rate = ((ControlledObject->getPos() - ReferenceFrame->getPos()) - ReferenceVector).getLen();
+            ReferenceVector = ControlledObject->getPos() - ReferenceFrame->getPos();
 
-            return ((ControlledObject->getPos() - ReferenceFrame->getPos()) - ReferenceVector).getLen();
+            return Rate;
         }
         return -1;
     }
