@@ -15,6 +15,7 @@ int main() {
 
     for (int planet_idx = 0; planet_idx < NR_PLANETS; ++planet_idx)
         space.addPlanet(new Planet((PLANET_TYPE) planet_idx, {800, 500}));
+    space.allPlanetsAdded();
 
     main_window.runEventCycle();
 

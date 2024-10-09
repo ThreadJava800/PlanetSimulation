@@ -2,20 +2,39 @@
 #define __PLANET_H__
 
 #include <vector>
+#include <memory>
+#include <cassert>
 
 #include "graphics.h"
 #include "base/physics.h"
 
+class Runge_Kutta
+{
+public:
+    struct ratio
+    {
+        union
+        {
+            Vector2Mkm         pos;
+            Vector2Mkm_in_sec  veloc;
+        };
+
+        Vector2Mkm_in_sec2 accel;
+    };
+
+    ratio ratios[4] = {};
+};
+
 class Physical {
 public:
-    Physical (const Vector2D _pos, const Mkg _mass, Vector2D _veloc = Vector2D()) :
-        pos    (_pos),
-        mass   (_mass),
-        accel  (0, 0),
-        veloc  (_veloc)
+    Physical (const Mkg _mass, const Vector2D _pos, const Vector2D _veloc = Vector2D()) :
+        mass  (_mass),
+        pos   (_pos),
+        veloc (_veloc),
+        accel (0, 0)
     {}
 
-    void update (const Msec delta_time) {
+    void update(const Msec delta_time, const Runge_Kutta rk4) {
         dbgPrint("============UPDATE(ОШАЛЕТЬ, ПИСЮН!)============\n"
             "accel = (%lf, %lf)\n"
             "veloc = (%lf, %lf)\n"
@@ -24,8 +43,8 @@ public:
         dbgPrint("\n"
             "time = %lf\n", delta_time);
 
-        veloc += accel * delta_time;
-        pos   += veloc * delta_time;
+        pos   += (delta_time / 6) * (rk4.ratios[0].veloc + 2*rk4.ratios[1].veloc + 2*rk4.ratios[2].veloc + rk4.ratios[3].veloc);
+        veloc += (delta_time / 6) * (rk4.ratios[0].accel + 2*rk4.ratios[1].accel + 2*rk4.ratios[3].accel + rk4.ratios[3].accel);
 
         dbgPrint("\n"
             "accel = (%lf, %lf)\n"
@@ -34,22 +53,23 @@ public:
             "============(Ну ПИСЮН и ПИСЮН, чего кричать-то?)============\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
     }
 
-    Vector2Mkm        getPos()   const { return pos;   }
-    Mkg               getMass()  const { return mass;  }
-    Vector2Mkm_in_sec getVeloc() const { return veloc; }
+    Vector2Mkm         getPos  () const { return pos;   }
+    Vector2Mkm_in_sec  getVeloc() const { return veloc; }
+    Vector2Mkm_in_sec2 getAccel() const { return accel; }
 
-    Vector2Mkm_in_sec2 accel;
+    const Mkg mass;
 
 protected:
-    Vector2Mkm        pos;
-    Mkg               mass;
-    Vector2Mkm_in_sec veloc;
+    Vector2Mkm         pos;
+    Vector2Mkm_in_sec  veloc;
+public:
+    Vector2Mkm_in_sec2 accel;
 };
 
 class Planet : public Renderable, public Physical {
 public:
     Planet(const PLANET_TYPE _type, const Vector2Mkm _zero_pos) :
-        Physical ({_zero_pos.x, _zero_pos.y - DISTANCES[_type]}, MASSES[_type], {VELOCITIES[_type], 0}),
+        Physical (MASSES[_type], {_zero_pos.x, _zero_pos.y - DISTANCES[_type]}, {VELOCITIES[_type], 0}),
         asset    (IMAGE_PATHS[_type])
     {}
 
@@ -74,27 +94,48 @@ public:
         planets.push_back(planet);
     }
 
+    void allPlanetsAdded() {
+        update_accels();
+    }
+
     void update(const double delta_time) {
-        for (size_t first_pln = 0; first_pln < planets.size(); first_pln++) {
-            auto first = planets[first_pln];
-            Vector2D force;
-            for (size_t second_pln = 0; second_pln < planets.size(); second_pln++) {
-                if (first_pln == second_pln) continue;
+        const size_t size = planets.size();
+        std::vector<Runge_Kutta> rk4(size);
 
-                auto second = planets[second_pln];
-                force += 
-                    universalGravitation (
-                        first ->getMass(), 
-                        second->getMass(), 
-                        second->getPos () - first->getPos()
-                    );
+        // ratios[0] initialization
+        for (size_t idx = 0; idx < size; ++idx)
+            rk4[idx].ratios[0] = {.veloc = planets[idx]->getVeloc(), .accel = planets[idx]->getAccel()};
 
+        // ratios[1] initialization
+        for (size_t idx = 0; idx < size; ++idx)
+            rk4[idx].ratios[1].pos = planets[idx]->getPos() + rk4[idx].ratios[0].veloc * (delta_time / 2);
+        calc_accels(rk4, 1);
 
-//              dbgPrint("Dir: %lf %lf\n", (second->getPos() - first->getPos()).x, (second->getPos() - first->getPos()).y);
-            }
-            first->accel = force / first->getMass();
-            first->update(delta_time);
-        }
+        for (size_t idx = 0; idx < size; ++idx)
+            rk4[idx].ratios[1].veloc = planets[idx]->getVeloc() + rk4[idx].ratios[0].accel * (delta_time / 2);
+
+        // ratios[2] initialization
+        for (size_t idx = 0; idx < size; ++idx)
+            rk4[idx].ratios[2].pos = planets[idx]->getPos() + rk4[idx].ratios[1].veloc * (delta_time / 2);
+        calc_accels(rk4, 2);
+
+        for (size_t idx = 0; idx < size; ++idx)
+            rk4[idx].ratios[2].veloc = planets[idx]->getVeloc() + rk4[idx].ratios[1].accel * (delta_time / 2);
+
+        // ratios[3] initialization
+        for (size_t idx = 0; idx < size; ++idx)
+            rk4[idx].ratios[3].pos = planets[idx]->getPos() + rk4[idx].ratios[2].veloc * delta_time;
+        calc_accels(rk4, 3);
+
+        for (size_t idx = 0; idx < size; ++idx)
+            rk4[idx].ratios[3].veloc = planets[idx]->getVeloc() + rk4[idx].ratios[2].accel * delta_time;
+
+        // update poses and veloces
+        for (size_t idx = 0; idx < size; ++idx)
+            planets[idx]->update(delta_time, rk4[idx]);
+
+        // update accels
+        update_accels();
     }
 
     void draw(RenderTarget& render_target) override {
@@ -110,6 +151,45 @@ public:
         }
     }
 private:
+    void calc_accels(std::vector<Runge_Kutta> &rk4, const int rk4_idx)
+    {
+        for (size_t first_pln = 0; first_pln < planets.size(); first_pln++) {
+            Vector2D force;
+            for (size_t second_pln = 0; second_pln < planets.size(); second_pln++) {
+                if (first_pln == second_pln) continue;
+
+                force +=
+                    universalGravitation (
+                        planets[first_pln] ->mass,
+                        planets[second_pln]->mass,
+                        rk4[second_pln].ratios[rk4_idx].pos - rk4[first_pln].ratios[rk4_idx].pos
+                    );
+            }
+            rk4[first_pln].ratios[rk4_idx].accel = force / planets[first_pln]->mass;
+        }
+    }
+
+    void update_accels()
+    {
+        for (size_t first_idx = 0; first_idx < planets.size(); first_idx++) {
+            auto first_pln = planets[first_idx];
+
+            Vector2D force;
+            for (size_t second_idx = 0; second_idx < planets.size(); second_idx++) {
+                if (first_idx == second_idx) continue;
+                auto second_pln = planets[second_idx];
+
+                force +=
+                    universalGravitation (
+                        first_pln ->mass,
+                        second_pln->mass,
+                        second_pln->getPos() - first_pln->getPos()
+                    );
+            }
+            first_pln->accel = force / first_pln->mass;
+        }
+    }
+
     std::vector<Planet*> planets;
 
     Image    asset;
