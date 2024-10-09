@@ -76,7 +76,7 @@ void BaseWindow::update(const double delta_time) {
 }
 
 void BaseWindow::runEventCycle(CycleChecker *cycle_checker) {
-    double DELTA_TIME = 0.001;
+    double DELTA_TIME = 0.0006;
 
     sf::Clock clk;
     double timer = 0;
