@@ -57,6 +57,8 @@ public:
     Vector2Mkm_in_sec  getVeloc() const { return veloc; }
     Vector2Mkm_in_sec2 getAccel() const { return accel; }
 
+    void setPos(const Vector2Mkm &position) { pos = position; } 
+
     const Mkg mass;
 
 protected:
@@ -203,7 +205,7 @@ static const DOUBLE MAX_RATE = 1e9 + 7;
 
 class CycleChecker {
 public:
-    explicit CycleChecker(const Planet *controlledObject, const Planet *referenceFrame):
+    explicit CycleChecker(Planet *controlledObject, const Planet *referenceFrame):
         ControlledObject(controlledObject),
         ReferenceFrame(referenceFrame),
         ReferenceVector(controlledObject->getPos() - referenceFrame->getPos()),
@@ -229,6 +231,7 @@ public:
             cycles = 0;
             DOUBLE Rate = MinRate;
             MinRate = MAX_RATE;
+            ControlledObject->setPos(ReferenceFrame->getPos() + ReferenceVector);
 
             return Rate;
         }
@@ -242,7 +245,7 @@ private:
 
     Vector2D ReferenceVector;
     const Planet  *ReferenceFrame;
-    const Planet  *ControlledObject;
+    Planet  *ControlledObject;
 };
 
 #endif
