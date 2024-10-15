@@ -96,7 +96,7 @@ void BaseWindow::runEventCycle(CycleChecker *cycle_checker) {
 
         double delta_time = clk.restart().asMicroseconds();
         timer += delta_time;
-        if (timer >= 100) {
+        if (timer >= 1000) {
             update(DELTA_TIME);
             cycleCounter++;
             timer = 0;

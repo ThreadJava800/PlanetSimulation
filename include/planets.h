@@ -199,13 +199,16 @@ private:
     Vector2D  size;
 };
 
+static const DOUBLE MAX_RATE = 1e9 + 7;
+
 class CycleChecker {
 public:
     explicit CycleChecker(const Planet *controlledObject, const Planet *referenceFrame):
         ControlledObject(controlledObject),
         ReferenceFrame(referenceFrame),
         ReferenceVector(controlledObject->getPos() - referenceFrame->getPos()),
-        cycles(0)
+        cycles(0),
+        MinRate(MAX_RATE)
     {}
 
     void update() {
@@ -220,11 +223,12 @@ public:
 
     DOUBLE waitErrorRate() {
         update();
+        MinRate = std::min(MinRate, ((ControlledObject->getPos() - ReferenceFrame->getPos()) - ReferenceVector).getLen());
         // dbgPrint("Cycles: %d, Orientation: %lg\n", cycles, lastOrientation);
         if (cycles == 2) {
             cycles = 0;
-            DOUBLE Rate = ((ControlledObject->getPos() - ReferenceFrame->getPos()) - ReferenceVector).getLen();
-            ReferenceVector = ControlledObject->getPos() - ReferenceFrame->getPos();
+            DOUBLE Rate = MinRate;
+            MinRate = MAX_RATE;
 
             return Rate;
         }
@@ -233,6 +237,7 @@ public:
 
 private:
     uint32_t cycles;
+    DOUBLE MinRate;
     DOUBLE lastOrientation = 1;
 
     Vector2D ReferenceVector;
