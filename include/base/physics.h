@@ -13,14 +13,14 @@ static inline DOUBLE pow3(DOUBLE value) { return value * value * value; }
 enum PLANET_TYPE
 {
     SUN     ,
-    MERCURY ,
-    VENUS   ,
+//  MERCURY ,
+//  VENUS   ,
     EARTH   ,
-    MARS    ,
-    JUPITER ,
-    SATURN  ,
-    URANUS  ,
-    NEPTUNE ,
+//  MARS    ,
+//  JUPITER ,
+//  SATURN  ,
+//  URANUS  ,
+//  NEPTUNE ,
 
     NR_PLANETS
 };
@@ -29,14 +29,14 @@ enum PLANET_TYPE
 const char *const IMAGE_PATHS[NR_PLANETS] =
 {
     [SUN]     = "assets/sun.png"    ,
-    [MERCURY] = "assets/mercury.png",
-    [VENUS]   = "assets/venus.png"  ,
+//  [MERCURY] = "assets/mercury.png",
+//  [VENUS]   = "assets/venus.png"  ,
     [EARTH]   = "assets/earth.png"  ,
-    [MARS]    = "assets/mars.png"   ,
-    [JUPITER] = "assets/jupiter.png",
-    [SATURN]  = "assets/saturn.png" ,
-    [URANUS]  = "assets/uranus.png" ,
-    [NEPTUNE] = "assets/neptune.png",
+//  [MARS]    = "assets/mars.png"   ,
+//  [JUPITER] = "assets/jupiter.png",
+//  [SATURN]  = "assets/saturn.png" ,
+//  [URANUS]  = "assets/uranus.png" ,
+//  [NEPTUNE] = "assets/neptune.png",
 };
 
 /// Mass
@@ -51,14 +51,14 @@ static inline Pkg Mkg_to_Pkg(Mkg value) { return value * MASS_UNIT; }
 static const Mkg MASSES[NR_PLANETS] =
 {
     [SUN]     = 333000  ,
-    [MERCURY] = 0.0553  ,
-    [VENUS]   = 0.815   ,
+//  [MERCURY] = 0.0553  ,
+//  [VENUS]   = 0.815   ,
     [EARTH]   = 1       ,
-    [MARS]    = 0.107   ,
-    [JUPITER] = 317.8   ,
-    [SATURN]  = 95.27   ,
-    [URANUS]  = 14.59   ,
-    [NEPTUNE] = 17.29   ,
+//  [MARS]    = 0.107   ,
+//  [JUPITER] = 317.8   ,
+//  [SATURN]  = 95.27   ,
+//  [URANUS]  = 14.59   ,
+//  [NEPTUNE] = 17.29   ,
 };
 
 /// Distance constants
@@ -79,14 +79,14 @@ static inline Vector2Pkm Vector2Mkm_to_Vector2Pkm(Vector2Mkm value) { return val
 static const Mkm DISTANCES[NR_PLANETS] =
 {
     [SUN]     = 0       ,
-    [MERCURY] = 39.0    ,
-    [VENUS]   = 72.0    ,
+//  [MERCURY] = 39.0    ,
+//  [VENUS]   = 72.0    ,
     [EARTH]   = 100     ,
-    [MARS]    = 152.0   ,
-    [JUPITER] = 520.0   ,
-    [SATURN]  = 954.0   ,
-    [URANUS]  = 1919.0  ,
-    [NEPTUNE] = 3007.0  ,
+//  [MARS]    = 152.0   ,
+//  [JUPITER] = 520.0   ,
+//  [SATURN]  = 954.0   ,
+//  [URANUS]  = 1919.0  ,
+//  [NEPTUNE] = 3007.0  ,
 };
 
 /// Time constants
@@ -116,14 +116,14 @@ static inline Vector2Pkm_in_sec Vector2Mkm_in_sec_to_Vector2Pkm_in_sec(Vector2Mk
 static const Mkm_in_sec VELOCITIES[NR_PLANETS] =
 {
     [SUN]     = 0       ,
-    [MERCURY] = 99.92   ,
-    [VENUS]   = 73.885  ,
+//  [MERCURY] = 99.92   ,
+//  [VENUS]   = 73.885  ,
     [EARTH]   = 62.83   ,
-    [MARS]    = 50.91   ,
-    [JUPITER] = 27.575  ,
-    [SATURN]  = 20.444  ,
-    [URANUS]  = 14.37   ,
-    [NEPTUNE] = 11.456  ,
+//  [MARS]    = 50.91   ,
+//  [JUPITER] = 27.575  ,
+//  [SATURN]  = 20.444  ,
+//  [URANUS]  = 14.37   ,
+//  [NEPTUNE] = 11.456  ,
 };
 
 /// Acceleration constants

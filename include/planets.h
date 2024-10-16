@@ -13,12 +13,8 @@ class Runge_Kutta
 public:
     struct ratio
     {
-        union
-        {
-            Vector2Mkm         pos;
-            Vector2Mkm_in_sec  veloc;
-        };
-
+        Vector2Mkm         pos;
+        Vector2Mkm_in_sec  veloc;
         Vector2Mkm_in_sec2 accel;
     };
 
@@ -111,26 +107,29 @@ public:
         // ratios[1] initialization
         for (size_t idx = 0; idx < size; ++idx)
             rk4[idx].ratios[1].pos = planets[idx]->getPos() + rk4[idx].ratios[0].veloc * (delta_time / 2);
-        calc_accels(rk4, 1);
 
         for (size_t idx = 0; idx < size; ++idx)
             rk4[idx].ratios[1].veloc = planets[idx]->getVeloc() + rk4[idx].ratios[0].accel * (delta_time / 2);
 
+        calc_accels(rk4, 1);
+
         // ratios[2] initialization
         for (size_t idx = 0; idx < size; ++idx)
             rk4[idx].ratios[2].pos = planets[idx]->getPos() + rk4[idx].ratios[1].veloc * (delta_time / 2);
-        calc_accels(rk4, 2);
 
         for (size_t idx = 0; idx < size; ++idx)
             rk4[idx].ratios[2].veloc = planets[idx]->getVeloc() + rk4[idx].ratios[1].accel * (delta_time / 2);
 
+        calc_accels(rk4, 2);
+
         // ratios[3] initialization
         for (size_t idx = 0; idx < size; ++idx)
             rk4[idx].ratios[3].pos = planets[idx]->getPos() + rk4[idx].ratios[2].veloc * delta_time;
-        calc_accels(rk4, 3);
 
         for (size_t idx = 0; idx < size; ++idx)
             rk4[idx].ratios[3].veloc = planets[idx]->getVeloc() + rk4[idx].ratios[2].accel * delta_time;
+
+        calc_accels(rk4, 3);
 
         // update poses and veloces
         for (size_t idx = 0; idx < size; ++idx)
@@ -157,6 +156,7 @@ public:
 private:
     void calc_accels(std::vector<Runge_Kutta> &rk4, const int rk4_idx)
     {
+    /*
         for (size_t first_pln = 0; first_pln < planets.size(); first_pln++) {
             Vector2D force;
             for (size_t second_pln = 0; second_pln < planets.size(); second_pln++) {
@@ -171,10 +171,17 @@ private:
             }
             rk4[first_pln].ratios[rk4_idx].accel = force / planets[first_pln]->mass;
         }
+    */
+    DOUBLE accel_mod = (rk4[1].ratios[rk4_idx].veloc.getLen() * rk4[1].ratios[rk4_idx].veloc.getLen()) /
+        (rk4[0].ratios[rk4_idx].pos - rk4[1].ratios[rk4_idx].pos).getLen();
+
+    rk4[0].ratios[rk4_idx].accel = Vector2D(0, 0);
+    rk4[1].ratios[rk4_idx].accel = accel_mod * ((rk4[0].ratios[rk4_idx].pos - rk4[1].ratios[rk4_idx].pos) / (rk4[0].ratios[rk4_idx].pos - rk4[1].ratios[rk4_idx].pos).getLen());
     }
 
     void update_accels()
     {
+    /*
         for (size_t first_idx = 0; first_idx < planets.size(); first_idx++) {
             auto first_pln = planets[first_idx];
 
@@ -192,6 +199,13 @@ private:
             }
             first_pln->accel = force / first_pln->mass;
         }
+    */
+
+    DOUBLE accel_mod = (planets[1]->getVeloc().getLen() * planets[1]->getVeloc().getLen()) /
+        (planets[0]->getPos() - planets[1]->getPos()).getLen();
+
+    planets[0]->accel = Vector2D(0, 0);
+    planets[1]->accel = accel_mod * ((planets[0]->getPos() - planets[1]->getPos()) / (planets[0]->getPos() - planets[1]->getPos()).getLen());
     }
 
     std::vector<Planet*> planets;
