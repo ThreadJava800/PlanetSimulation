@@ -34,23 +34,23 @@ public:
         accel (0, 0)
     {}
 
-    void update(const Msec delta_time, const Runge_Kutta rk4) {
-        // dbgPrint("============UPDATE(ОШАЛЕТЬ, ПИСЮН!)============\n"
-        //     "accel = (%lf, %lf)\n"
-        //     "veloc = (%lf, %lf)\n"
-        //     "pos   = (%lf, %lf)\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
+    void update (const Msec delta_time) {
+        dbgPrint("============UPDATE(ОШАЛЕТЬ, ПИСЮН!)============\n"
+            "accel = (%lf, %lf)\n"
+            "veloc = (%lf, %lf)\n"
+            "pos   = (%lf, %lf)\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
 
-        // dbgPrint("\n"
-        //     "time = %lf\n", delta_time);
+        dbgPrint("\n"
+            "time = %lf\n", delta_time);
 
-        pos   += (delta_time / 6) * (rk4.ratios[0].veloc + 2*rk4.ratios[1].veloc + 2*rk4.ratios[2].veloc + rk4.ratios[3].veloc);
-        veloc += (delta_time / 6) * (rk4.ratios[0].accel + 2*rk4.ratios[1].accel + 2*rk4.ratios[3].accel + rk4.ratios[3].accel);
+        veloc += accel * delta_time;
+        pos   += veloc * delta_time;
 
-        // dbgPrint("\n"
-        //     "accel = (%lf, %lf)\n"
-        //     "veloc = (%lf, %lf)\n"
-        //     "pos   = (%lf, %lf)\n"
-        //     "============(Ну ПИСЮН и ПИСЮН, чего кричать-то?)============\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
+        dbgPrint("\n"
+            "accel = (%lf, %lf)\n"
+            "veloc = (%lf, %lf)\n"
+            "pos   = (%lf, %lf)\n"
+            "============(Ну ПИСЮН и ПИСЮН, чего кричать-то?)============\n", accel.x, accel.y, veloc.x, veloc.y, pos.x, pos.y);
     }
 
     Vector2Mkm         getPos  () const { return pos;   }
@@ -101,43 +101,37 @@ public:
     }
 
     void update(const double delta_time) {
-        const size_t size = planets.size();
-        std::vector<Runge_Kutta> rk4(size);
+        /*
+        for (size_t first_pln = 0; first_pln < planets.size(); first_pln++) {
+            auto first = planets[first_pln];
+            Vector2D force;
+            for (size_t second_pln = 0; second_pln < planets.size(); second_pln++) {
+                if (first_pln == second_pln) continue;
 
-        // ratios[0] initialization
-        for (size_t idx = 0; idx < size; ++idx)
-            rk4[idx].ratios[0] = {.veloc = planets[idx]->getVeloc(), .accel = planets[idx]->getAccel()};
+                auto second = planets[second_pln];
+                force += 
+                    universalGravitation (
+                        first ->mass, 
+                        second->mass, 
+                        second->getPos () - first->getPos()
+                    );
 
-        // ratios[1] initialization
-        for (size_t idx = 0; idx < size; ++idx)
-            rk4[idx].ratios[1].pos = planets[idx]->getPos() + rk4[idx].ratios[0].veloc * (delta_time / 2);
-        calc_accels(rk4, 1);
 
-        for (size_t idx = 0; idx < size; ++idx)
-            rk4[idx].ratios[1].veloc = planets[idx]->getVeloc() + rk4[idx].ratios[0].accel * (delta_time / 2);
+//              dbgPrint("Dir: %lf %lf\n", (second->getPos() - first->getPos()).x, (second->getPos() - first->getPos()).y);
+            }
+            first->accel = force / first->mass;
+            first->update(delta_time);
+        }
+        */
 
-        // ratios[2] initialization
-        for (size_t idx = 0; idx < size; ++idx)
-            rk4[idx].ratios[2].pos = planets[idx]->getPos() + rk4[idx].ratios[1].veloc * (delta_time / 2);
-        calc_accels(rk4, 2);
+        DOUBLE accel_mod = (planets[1]->getVeloc().getLen() * planets[1]->getVeloc().getLen()) /
+            (planets[0]->getPos() - planets[1]->getPos()).getLen();
 
-        for (size_t idx = 0; idx < size; ++idx)
-            rk4[idx].ratios[2].veloc = planets[idx]->getVeloc() + rk4[idx].ratios[1].accel * (delta_time / 2);
+        planets[0]->accel = Vector2D(0, 0);
+        planets[1]->accel = accel_mod * ((planets[0]->getPos() - planets[1]->getPos()) / (planets[0]->getPos() - planets[1]->getPos()).getLen());
 
-        // ratios[3] initialization
-        for (size_t idx = 0; idx < size; ++idx)
-            rk4[idx].ratios[3].pos = planets[idx]->getPos() + rk4[idx].ratios[2].veloc * delta_time;
-        calc_accels(rk4, 3);
-
-        for (size_t idx = 0; idx < size; ++idx)
-            rk4[idx].ratios[3].veloc = planets[idx]->getVeloc() + rk4[idx].ratios[2].accel * delta_time;
-
-        // update poses and veloces
-        for (size_t idx = 0; idx < size; ++idx)
-            planets[idx]->update(delta_time, rk4[idx]);
-
-        // update accels
-        update_accels();
+        planets[0]->update(delta_time);
+        planets[1]->update(delta_time);
     }
 
     void draw(RenderTarget& render_target) override {
@@ -175,6 +169,7 @@ private:
 
     void update_accels()
     {
+    /*
         for (size_t first_idx = 0; first_idx < planets.size(); first_idx++) {
             auto first_pln = planets[first_idx];
 
@@ -192,6 +187,12 @@ private:
             }
             first_pln->accel = force / first_pln->mass;
         }
+    */
+        DOUBLE accel_mod = (planets[1]->getVeloc().getLen() * planets[1]->getVeloc().getLen()) /
+            (planets[0]->getPos() - planets[1]->getPos()).getLen();
+
+        planets[0]->accel = Vector2D(0, 0);
+        planets[1]->accel = accel_mod * ((planets[0]->getPos() - planets[1]->getPos()) / (planets[0]->getPos() - planets[1]->getPos()).getLen());
     }
 
     std::vector<Planet*> planets;
